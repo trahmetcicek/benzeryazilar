@@ -2,13 +2,13 @@
 bg: "owl.jpg"
 layout: page
 title: "About"
-crawlertitle: "Why and how this blog was created"
+crawlertitle: "Tentang KI ON GITHUB"
 permalink: /about/
 summary: "About this blog"
 active: about
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
+Blog ini hanya dokumentasi saya tentang Github dan Jekyll. Rasa penasaran saya bermula ketka mengetahui bahwa Jekyll adalah CMS berbasis Linux dan Rubby. Untuk urusan linux, saya ga terlalu paham juga, hanya bisa sedikit oprek VPS untuk keperluan tunelling, webhosting dan torrent. Sobat bisa kunjungi domain utama saya [kangismet.net](http://kangismet.net/).
 
 You can find the source code for the Jekyll new theme at:
 {{site.twitter_username}} /
