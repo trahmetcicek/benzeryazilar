@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>DroidPluss Random Post</title>
+<meta name="viewport" content="width=device-width">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<link href='https://fonts.googleapis.com/css?family=Roboto:100,200,300,400italic,400,500,500italic,700,700italic,900%7CMaterial+Icons' rel='stylesheet' type='text/css'/>
+<style>
+body {
+  background-color:white;
+  margin:0;
+  padding:50px;
+}
+a {
+  color:#212121;
+  text-decoration:none;
+}
+a:hover {color:#0379C4}
+
+/* ==== Related Post Widget Start ==== */
+
+.related-post {
+  margin:2em auto 0;
+  font-family: Roboto, sans-serif;
+  font-size:16px;
+}
+.related-post h4 {
+  font-size:150%;
+  margin:0 0 .5em;
+  font-weight:300;
+}
+
+/* Style 2 */
+.related-post-style-2,
+.related-post-style-2 li {
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+.related-post-style-2 li {
+  padding:10px 10px 10px 0;
+  border-top:1px solid #eee;
+  overflow:hidden;
+}
+.related-post-style-2 li:first-child {border-top:none}
+.related-post-style-2 .related-post-item-thumbnail {
+  width:80px;
+  height:80px;
+  max-width:none;
+  max-height:none;
+  background-color:transparent;
+  border:none;
+  padding:0;
+  float:left;
+  margin:2px 10px 0 0;
+}
+.related-post-style-2 .related-post-item-title {
+  font-weight:500;
+  font-size:100%;
+}
+.related-post-style-2 .related-post-item-summary {
+  display:block;
+  overflow:hidden;
+}
+.related-post-style-2 .related-post-item-more {
+  display:none;
+}
+
+/* ==== Related Post Widget End ==== */
+</style>
+</head>
+<body>
+
+<div id="related-post" class="related-post"></div>
+<script>
+var labelArray = [],
+    relatedPostConfig = {
+        numPosts: 10,
+        summaryLength: 100,
+        widgetStyle: 2,
+        callBack: function() {
+            var $container = $('#' + this.containerId + ' > ul'),
+                $list = $container.find('li'),
+                innerHeight = $list.first().height(),
+                outerHeight = $list.first().outerHeight(true);
+            // Container & list height setup
+            $container.css({
+                "height": outerHeight * $list.length / 2,
+                "overflow": "hidden"
+            });
+            $list.css({
+                "height": innerHeight,
+                "overflow": "hidden"
+            });
+            // Animation
+            function newsTicker() {
+                window.setTimeout(function() {
+                    $container.find('li:last').stop().animate({
+                        opacity: 0
+                    }, 1000, function() {
+                        $(this).hide().prependTo($container).slideDown(1000, function() {
+                            $(this).stop().animate({
+                                opacity: 1
+                            }, 1000, newsTicker);
+                        });
+                    });
+                }, 3000);
+            } newsTicker();
+        }
+    };
+</script>
+<script src="http://kangismet.net/amp/js/related-posts.min.js"></script>
+
+</body>
+</html>
