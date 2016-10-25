@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Demo</title>
+<style type="text/css">
+/* Basic Skin for Multi Feed Loader */
+.list-entries{border:1px solid #999}.list-entries ul,.list-entries li{margin:0;padding:0;list-style:none}.list-entries li{padding:1em;border-bottom:1px solid #999}.list-entries .main-title{padding:2px}.list-entries .main-title h4{display:block;font:inherit;font-weight:bold;padding:.5em 1em;background-color:#333;color:#ccc;margin:0;line-height:normal}.list-entries .title a{font-weight:bold;font-size:110%;text-decoration:none}.list-entries .title a:hover{text-decoration:underline}.list-entries img,.list-entries .fake-img{border:none;background-color:#333;margin:0 1em 0 0;padding:0;float:left}.list-entries .summary{overflow:hidden}.list-entries .more-link{border-bottom:none;padding:.5em}.list-entries .more-link a{display:block;line-height:2em;height:2em;overflow:hidden;text-decoration:none;background-color:#900;padding:0 .6em;position:relative;font-weight:bold;color:white}.list-entries .more-link a:after{content:"";width:0;height:0;position:absolute;top:50%;right:.3em;border:4px solid transparent;border-left-color:white;margin-top:-4px}.list-entries .more-link a:hover{background-color:#600}
+* {
+  margin:0;
+  padding:0;
+}
+
+body {
+  font:normal normal 11px/1.5 Tahoma,Verdana,Arial,Sans-Serif;
+  color:black;
+  background-color:white;
+  padding:50px;
+}
+
+h1 {
+  font-weight:bold;
+  font-size:300%;
+  margin:0 0 .5em;
+}
+
+</style>
+<style type="text/css">
+/* Custom CSS */
+.list-entries {
+  margin:5px;
+  padding:0;
+  width:270px;
+  float:left;
+}
+</style>
+</head>
+<body>
+
+<h1>Demo for Multi Blogger Feeds Loader</h1>
+
+<div id="feed-list-container"></div>
+<div style="clear:both;"></div>
+
+
+<script type="text/javascript">
+
+var multiFeed = {
+	feedsUri: [
+		{
+			name: "AMPHTML",
+			url: "http://blog.kangismet.net",
+			tag: "AMPHTML"
+		},
+		{
+			name: "Blogger Tutorial",
+			url: "http://blog.kangismet.net",
+			tag: "Blogger Tutorial"
+		},
+		{
+			name: "Tentang CSS",
+			url: "http://blog.kangismet.net",
+			tag: "CSS"
+		}
+	],
+	numPost: 4,
+	showThumbnail: true,
+	showSummary: true,
+	summaryLength: 80,
+	titleLength: "auto",
+	thumbSize: 72,
+	containerId: "feed-list-container",
+	readMore: {
+		text: "Selengkapnya",
+		endParam: "?max-results=20"
+	}
+};
+
+</script>
+<script type="text/javascript" src="multi-feed.js"></script>
+
+<div style="margin-top:1em;text-align:right;"><a href="http://www.dte.web.id">DTE :]</a></div>
+
+<script>
+	// Multi Feed Loader Script by Taufik Nurrohman
+// URL: http://www.dte.web.id, https://plus.google.com/108949996304093815163/about
+
+var mf_defaults = {
+	feedsUri: [
+		{
+			name: "Posting JQuery",
+			url: "http://www.dte.web.id",
+			tag: "JQuery"
+		},
+		{
+			name: "Posting CSS",
+			url: "http://www.dte.web.id",
+			tag: "CSS"
+		},
+		{
+			name: "Widget-Widget Blogger",
+			url: "http://www.dte.web.id",
+			tag: "Widget"
+		}
+	],
+	numPost: 4,
+	showThumbnail: true,
+	showSummary: true,
+	summaryLength: 80,
+	titleLength: "auto",
+	thumbSize: 72,
+	newTabLink: false,
+	containerId: "feed-list-container",
+	listClass: "list-entries",
+	readMore: {
+		text: "More",
+		endParam: "?max-results=20"
+	},
+	autoHeight: false,
+	current: 0,
+	onLoadFeed: function(i) {
+		// console.log(this.feedsUri[i].name);
+	},
+	onLoadComplete: function() {
+		// console.log('Fully Loaded!');
+	},
+	loadFeed: function(index) {
+		var head = document.getElementsByTagName('head')[0],
+			cont = document.getElementById(this.containerId),
+			script = document.createElement('script');
+			script.type = "text/javascript";
+			script.src = this.feedsUri[index].url + '/feeds/posts/summary' + (this.feedsUri[index].tag ? '/-/' + this.feedsUri[index].tag : '') + '?alt=json-in-script&max-results=' + this.numPost + '&callback=listEntries';
+		head.appendChild(script);
+	}
+};
+
+for (var i in mf_defaults) {
+	mf_defaults[i] = (typeof (multiFeed[i]) !== undefined && typeof (multiFeed[i]) !== 'undefined') ? multiFeed[i] : mf_defaults[i];
+}
+
+function listEntries(json) {
+	var entry = json.feed.entry,
+		o = mf_defaults,
+		ct = document.getElementById(o.containerId),
+		div = document.createElement('div'),
+		skeleton = "<ul>",
+		total = o.feedsUri.length,
+		title, link, summ, img;
+	for (var i = 0; i < o.numPost; i++) {
+		if (i == entry.length) break;
+		title = (o.titleLength !== "auto") ? entry[i].title.$t.substring(0, o.titleLength) + (o.titleLength < entry[i].title.$t.length ? '&hellip;' : '') : entry[i].title.$t;
+		summ = ("summary" in entry[i]) ? entry[i].summary.$t.replace(/<br ?\/?>/g, " ").replace(/<.*?>/g, "").replace(/[<>]/g, "") : "";
+		summ = (o.summaryLength < summ.length) ? summ.substring(0, o.summaryLength) + '&hellip;' : summ;
+		img = ("media$thumbnail" in entry[i]) ? '<img src="' + entry[i].media$thumbnail.url.replace(/\/s72(\-c)?\//, "/s" + o.thumbSize + "-c/") + '" style="width:' + o.thumbSize + 'px;height:' + o.thumbSize + 'px;">' : '<span class="fake-img" style="width:' + o.thumbSize + 'px;height:' + o.thumbSize + 'px;"></span>';
+		for (var j = 0, jen = entry[i].link.length; j < jen; j++) {
+			link = (entry[i].link[j].rel == 'alternate') ? entry[i].link[j].href : '#';
+		}
+		skeleton += '<li><div class="inner"' + (!o.autoHeight ? ' style="height:' + o.thumbSize + 'px;overflow:hidden;"' : '') + '>';
+		skeleton += (o.showThumbnail) ? img : '';
+		skeleton += '<div class="title"><a href="' + link + '"' + (o.newTabLink ? ' target="_blank"' : '') + '>' + title + '</a></div>';
+		skeleton += '<div class="summary">';
+		skeleton += '<span' + (!o.showSummary ? ' style="display:none;"' : '')  + '>';
+		skeleton += (o.showSummary) ? summ : '';
+		skeleton += '</span></div>';
+		skeleton += '<span style="display:block;clear:both;"></span></div></li>';
+	}
+	skeleton += '</ul>';
+	skeleton += '<div class="more-link"><a href="' + o.feedsUri[o.current].url.replace(/\/$/, "") + '/search/label/' + o.feedsUri[o.current].tag + o.readMore.endParam + '"' + (o.newTabLink ? ' target="_blank"' : '') + '>' + o.readMore.text + '</a></div>';
+	div.className = o.listClass;
+	div.innerHTML = '<div class="main-title"><h4>' + o.feedsUri[o.current].name + '</h4></div>' + skeleton;
+	ct.appendChild(div);
+	o.onLoadFeed(o.current);
+	if ((o.current + 1) < total) o.loadFeed(o.current + 1);
+	if ((o.current + 1) == total) o.onLoadComplete();
+	o.current++;
+}
+
+mf_defaults.loadFeed(0);
+	</script>
+</body>
+</html>
